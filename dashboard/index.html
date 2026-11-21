@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Launch Radar — pre-token protocols ranked by implied value</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>TOKEN LAUNCH RADAR</h1>
+    <p class="sub">Which pre-token protocol is worth farming next — and what to do about it. 200 protocols, ranked by what their launch would be worth.</p>
+  </div>
+  <div class="stats" id="stats"></div>
+</header>
+
+<section class="model" id="model">
+  <h2>How the value is worked out — read this before trusting the board</h2>
+  <p class="formula">implied value = TVL &times; multiple &times; tier &times; growth &times; breadth &times; launch probability &times; 7%</p>
+  <ul class="factors">
+    <li><b>Multiple</b> — the protocol's category median mcap/TVL across the snapshot's own token-bearing protocols (128 comparables), winsorized at p5/p95. Categories with fewer than 5 comparables use the global median 0.214. Capped at 3.0. A median, not a mean: one rich token must not set the price.</li>
+    <li><b>Tier</b> — (100M &divide; TVL)<sup>0.12</sup>, clamped 0.75–1.25. Diminishing returns on size: a giant TVL is often mercenary capital and earns a smaller multiple.</li>
+    <li><b>Growth</b> — 1 + 0.5 &times; 7-day TVL change, clamped to &minus;25%…+40%. A hot week lifts value by at most 20%; a cold week costs at most 12.5%.</li>
+    <li><b>Breadth</b> — +8% per extra chain, up to +40%. Multi-chain reach is real, but the fifth chain adds as much as the second.</li>
+    <li><b>Launch probability</b> — from how long the protocol has run with no token: a hump peaking at 540 days (~18 months), 25% at the edges, 75% at the peak. Too young and the team is still building; too old with no token and it likely never launches.</li>
+    <li><b>7%</b> — the airdrop share: the slice of a launch's value a farmer can plausibly claim. Change this one number and the whole board re-prices.</li>
+  </ul>
+  <p class="note">Every figure comes from the sealed snapshot (DefiLlama, 2026-11-14). No protocol name is hardcoded in the model. Protocols whose token already trades are comparables only — they price the board, they never sit on it. “Records no token” means the snapshot records none, not that none exists. Implied values are this entry's own claim, not a promise.</p>
+</section>
+
+<section class="controls">
+  <input id="q" type="search" placeholder="Search name or slug…" aria-label="Search protocols">
+  <select id="cat" aria-label="Filter by category"><option value="">All categories</option></select>
+  <select id="chain" aria-label="Filter by chain"><option value="">All chains</option></select>
+  <label class="chk"><input id="wl" type="checkbox"> Watchlist only (40)</label>
+  <select id="sort" aria-label="Sort board">
+    <option value="implied">Sort: implied value ↓</option>
+    <option value="tvl">Sort: TVL ↓</option>
+    <option value="growth">Sort: 7-day change ↓</option>
+    <option value="age">Sort: age, no token ↓</option>
+    <option value="name">Sort: name A–Z</option>
+  </select>
+  <span class="count" id="count"></span>
+</section>
+
+<main class="grid">
+  <section class="board">
+    <table>
+      <thead><tr>
+        <th>#</th><th>Protocol</th><th>Category</th><th>Chains</th>
+        <th class="num">TVL</th><th class="num">7d</th><th class="num">Age</th>
+        <th class="num">Mult</th><th class="num">Launch</th><th class="num">Implied value</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p class="boardfoot">Click any row for its detail and farm plan. Ranks are the model's claim: rank 1 is the board's most valuable protocol.</p>
+  </section>
+  <aside class="detail" id="detail" aria-live="polite"></aside>
+</main>
+
+<footer>
+  <p>Token Launch Radar · snapshot 2026-11-14 · floor $50,000,000 · 40 watchlist + 160 pre-token below the floor, largest TVL first. Farm plans give concrete steps with costs and times; check the protocol's own announcements before sending funds, and never trust a claim link that did not come from them.</p>
+</footer>
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
