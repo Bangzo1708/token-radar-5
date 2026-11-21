@@ -72,6 +72,7 @@
 
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { fileURLToPath } from "node:url";
 import { buildDossier } from "./vendor/makefun-board.ts";
 
 // ---------------------------------------------------------------------------
@@ -474,7 +475,7 @@ function main(): void {
     if (args[i] === "--input" && i + 1 < args.length) input = args[i + 1];
   }
   const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "out";
-  const root = process.cwd();
+  const root = path.dirname(fileURLToPath(import.meta.url));
 
   const snap = JSON.parse(fs.readFileSync(input, "utf8")) as Snapshot;
   const { rows, model } = buildBoard(snap);
